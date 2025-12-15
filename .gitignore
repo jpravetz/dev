@@ -1,0 +1,86 @@
+# .gitignore
+# ============================================
+# ROOT DIRECTORY - IGNORE EVERYTHING BY DEFAULT
+# ============================================
+*
+
+# ============================================
+# ESSENTIAL GIT FILES (root folder only)
+# ============================================
+# Git's own files (must track these)
+!.git/
+!.gitignore
+!.gitattributes
+
+# Optional git files (uncomment if you need them)
+# !.gitmodules
+# !.gitkeep
+# !.gitmessage
+
+# ============================================
+# MARKDOWN FILES (root folder only)
+# ============================================
+# Track all markdown files in root folder
+!/*.md
+!/*.MD
+!/*.mdown
+!/*.markdown
+
+# ============================================
+# SPECIFIC ROOT MARKDOWN FILES (explicit examples)
+# ============================================
+!/BUG_REPORT.md
+!/CLAUDE.md
+!/GEMINI_GLOBAL.md
+!/AI.md
+
+# ============================================
+# PROJECT MANAGEMENT FILES (root folder only)
+# ============================================
+# Common project files you might want to track
+# Uncomment any you need:
+!/README.md
+# !/README
+# !/LICENSE
+# !/LICENSE.md
+# !/CHANGELOG.md
+# !/CONTRIBUTING.md
+# !/CODE_OF_CONDUCT.md
+
+# ============================================
+# MACOS SPECIFIC FILES (IGNORE EVERYWHERE)
+# ============================================
+# Apple Desktop Services Store
+.DS_Store
+.DS_Store?
+**/.DS_Store
+**/.DS_Store?
+
+# AppleDouble resource forks (._ files)
+._*
+**/._*
+
+# Apple temporary files
+.AppleDouble
+**/.AppleDouble
+
+# OS X folder attributes
+LSOverride
+Icon?
+
+# Thumbnail cache
+.Thumbs.db
+Thumbs.db
+**/.Thumbs.db
+**/Thumbs.db
+
+# Resource fork directories
+__MACOSX/
+**/__MACOSX/
+
+
+# ============================================
+# IMPORTANT: IGNORE ALL SUBDIRECTORIES & THEIR CONTENTS
+# ============================================
+# This ensures nothing in any folder is tracked
+/*/

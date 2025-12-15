@@ -1,1 +1,1 @@
-@GEMINI_GLOBAL.md
+@AI.md

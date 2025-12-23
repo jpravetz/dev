@@ -20,7 +20,9 @@
     - [Full import paths and `dep.ts` files](#full-import-paths-and-depts-files)
   - [Command Line Applications with Arguments and Logging](#command-line-applications-with-arguments-and-logging)
   - [Selecting External Libraries](#selecting-external-libraries)
+    - [@epdoc/fs Usage](#epdocfs-usage)
   - [TypeScript Code Generation](#typescript-code-generation)
+    - [Object-Oriented Programming (OOP) Principles](#object-oriented-programming-oop-principles)
   - [Code commenting](#code-commenting)
     - [JSDoc Commenting Guidelines (for TypeScript)](#jsdoc-commenting-guidelines-for-typescript)
     - [Naming Conventions](#naming-conventions)
@@ -365,6 +367,39 @@ The exception is where the package we are developing explicitly states that it
 is being developed to also work across [nodejs↗](https://nodejs.org) and
 [Bun↗](https://bun.com/).
 
+### @epdoc/fs Usage
+
+**Do not overlook that @epdoc/fs has many capabilities beyond normal file system
+operations, often eliminating the need for custom file handling functions or
+classes.
+
+**Example - @epdoc/fs loading configuration:**
+
+```typescript
+import * as FS from "@epdoc/fs";
+
+// Instead of creating a custom ConfigLoader class,
+// use @epdoc/fs directly since it handles the file operations:
+async function loadBondSettings(): Promise<AppConfig> {
+  const configFile = new FS.File("bond-config.json");
+
+  if (!(await configFile.exists())) {
+    return {}; // Sensible defaults
+  }
+
+  return await configFile.readJson<AppConfig>();
+}
+```
+
+**Key @epdoc/fs capabilities to leverage:**
+
+- `FS.File` for file operations (`readText()`, `writeText()`, `exists()`)
+- `FS.Directory` for directory operations (`list()`, `create()`)
+- `FS.Path` for path manipulation (`resolve()`, `join()`)
+
+Check the @epdoc/fs documentation at `~/dev/@epdoc/std/fs` before implementing
+custom file system abstractions.
+
 ## TypeScript Code Generation
 
 ALWAYS FOLLOW these recommendations for TypeScript projects.
@@ -379,9 +414,11 @@ ALWAYS FOLLOW these recommendations for TypeScript projects.
 - Do not use switch statements. Always use `if () {} else if () {} else {}`.
   - If a switch statement is already in use then it is allowed to remain, so do
     not modify it.
-- Use `#` prefix for TypeScript private class members instead of the `private` keyword:
+- Use `#` prefix for TypeScript private class members instead of the `private`
+  keyword:
   - **Preferred:** `#myPrivateField: string;` and `#myPrivateMethod() {}`
-  - **Avoid:** `private myPrivateField: string;` and `private myPrivateMethod() {}`
+  - **Avoid:** `private myPrivateField: string;` and
+    `private myPrivateMethod() {}`
   - The `#` prefix provides true privacy at runtime, not just compile-time
   - This is the modern ECMAScript standard for private class members
 - If and only if [@epdoc/type↗](https://github.com/epdoc/std/tree/master/type)
@@ -409,17 +446,22 @@ ALWAYS FOLLOW these recommendations for TypeScript projects.
 
 ### Object-Oriented Programming (OOP) Principles
 
-**Prefer object-oriented code over procedural code** when organizing related functionality. Classes provide better encapsulation, state management, and code organization compared to collections of standalone functions.
+**Prefer object-oriented code over procedural code** when organizing related
+functionality. Classes provide better encapsulation, state management, and code
+organization compared to collections of standalone functions.
 
 **When to use classes:**
+
 - When you have **related data and operations** that naturally belong together
 - When you need to **maintain state** across multiple operations
-- When functionality can benefit from **encapsulation** and **information hiding**
+- When functionality can benefit from **encapsulation** and **information
+  hiding**
 - When you have multiple functions operating on the same data structure
 
 **Example of OOP vs Procedural:**
 
 **Bad (Procedural):**
+
 ```typescript
 // Multiple standalone functions operating on the same data
 export function extractVideoMetadata(filePath: string): Promise<Metadata> { ... }
@@ -433,6 +475,7 @@ await writeNfoFile(nfoPath, nfo);
 ```
 
 **Good (Object-Oriented):**
+
 ```typescript
 // Class encapsulates related state and operations
 export class VideoMetadata extends Ctx.Base {
@@ -458,15 +501,20 @@ await metadata.write();
 ```
 
 **Key benefits of the OOP approach:**
+
 - **State management**: `probeData` and `nfo` are encapsulated within the class
 - **Context inheritance**: Extends `Ctx.Base` for consistent logging
 - **Cohesion**: Related operations are grouped together
-- **Encapsulation**: Private methods (using `#prefix`) can hide implementation details
-- **Reusability**: The class can be instantiated multiple times with different data
+- **Encapsulation**: Private methods (using `#prefix`) can hide implementation
+  details
+- **Reusability**: The class can be instantiated multiple times with different
+  data
 - **Testability**: Easier to mock and test as a unit
 
 **When procedural code is acceptable:**
-- Pure utility functions with no shared state (e.g., `formatDate(date: Date): string`)
+
+- Pure utility functions with no shared state (e.g.,
+  `formatDate(date: Date): string`)
 - Simple one-off operations that don't need encapsulation
 - Top-level orchestration code that coordinates between classes
 
@@ -697,7 +745,9 @@ with better error handling and automatic reconnection.
 
 ### Version Bumping
 
-Use the `@epdoc/bump` tool (installed globally as `bump`) to manage version increments and commits for Deno projects. The tool is located at `~/dev/@epdoc/tools/packages/bump` and can be modified as needed.
+Use the `@epdoc/bump` tool (installed globally as `bump`) to manage version
+increments and commits for Deno projects. The tool is located at
+`~/dev/@epdoc/tools/packages/bump` and can be modified as needed.
 
 **Basic Usage:**
 
@@ -714,7 +764,8 @@ bump -g -c -t "commit message"
 
 **Common Workflows:**
 
-- **Development commits**: Use `bump -g "message"` to increment prerelease version (e.g., `0.1.0-alpha.3` → `0.1.0-alpha.4`)
+- **Development commits**: Use `bump -g "message"` to increment prerelease
+  version (e.g., `0.1.0-alpha.3` → `0.1.0-alpha.4`)
 - **Significant updates**: Add `-c` flag to update CHANGELOG.md
 - **Release milestones**: Add `-t` flag to create a git tag
 
@@ -731,7 +782,9 @@ bump -g -c "Add remote execution for downloads on pve01"
 bump -g -c -t "Release candidate for v0.2.0"
 ```
 
-**Note:** The bump tool reads `deno.json`, updates the version field, and can automatically commit, update CHANGELOG.md, create tags, and push to git. See `~/dev/@epdoc/tools/packages/bump/README.md` for full documentation.
+**Note:** The bump tool reads `deno.json`, updates the version field, and can
+automatically commit, update CHANGELOG.md, create tags, and push to git. See
+`~/dev/@epdoc/tools/packages/bump/README.md` for full documentation.
 
 ---
 
